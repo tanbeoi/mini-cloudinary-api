@@ -7,7 +7,7 @@ info:
     Express, Multer, Sharp, AWS S3, Zod, and API key protection.
 
 servers:
-  - url: http://localhost:3000
+  - url: https://mini-cloudinary-project.onrender.com
 
 components:
   securitySchemes:
@@ -51,6 +51,37 @@ paths:
         '401':
           description: Missing or invalid API key
 
+  /list:
+    get:
+      tags: [List]
+      summary: List images from S3
+      responses:
+        '200':
+          description: Images listed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                          example: "images/abc123.jpg"
+                        size:
+                          type: integer
+                          example: 234567
+                        lastModified:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          example: "2026-06-15T02:08:03.000Z"
+        '500':
+          description: Failed to list objects
+
   /image/{key}:
     get:
       tags: [Image]
@@ -85,7 +116,7 @@ paths:
             type: integer
             minimum: 1
             maximum: 100
-          description: Output quality (1–100)
+          description: Output quality (1-100)
         - name: fmt
           in: query
           required: false
